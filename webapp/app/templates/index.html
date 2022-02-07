@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block head %}
+<style>
+
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div  id=MyPage>
+    <h1>{{ title }}</h1>
+    <h3> Section: {{ section }}</h3>
+    <a href="{{ url_for('main.index') }}">Home</a>
+    <a href="{{ url_for('main.media') }}">Media</a>
+    <hr>
+    <p> Reading .env file: {{ loc_var_01 }} </p>
+    <p> App Version: {{ app_version }} </p>
+
+    
+    <div id=MyForm>
+        <form id="submit_form">
+            {{ form.hidden_tag() }}
+            <div>
+                <label> {{ form.item.label }} </label>
+                <p id="theItem" class="form_field">{{ form.item }}</p>
+            </div>
+
+            <div>
+                <label> {{ form.value.label }} </label>
+                <p id="theValue" class="form_field">{{ form.value }}</p>  
+            </div>
+            <button id="submit" type="submit"> Save </button>
+        </form>
+    </div>
+    <div id="MyPanel">
+    <button id="add2db" class="my_btn" style="float: right;"> + </button>
+    <button id="erasedb" class="my_btn" style="float: left;"> &times </button>
+    </div>
+    <div id=MyTable>
+    <table>
+        <thead>
+          <tr>
+              <th>Id</th>
+              <th>Item</th>
+              <th>Value</th>
+              <th>Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in mytable_rows %}
+          <tr>
+              <th>{{ row.id }}</th>
+              <td>{{ row.item }}</td> 
+              <td>{{ row.value }}</td>
+              <td>{{ (row.stamp).strftime("%b %d %Y %H:%M:%S") }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    
+</div>
+
+<script>
+
+$('#submit_form').on('submit', function(e){
+    e.preventDefault();
+
+    var form = $('#submit_form')[0];
+    var data = new FormData(form)
+
+    data.append('button', 'submit')
+
+    req = $.ajax({
+        type : 'POST',
+        url : '/index',
+        data : data,
+        contentType: false,
+        processData: false, 
+        success : function(){
+        }
+    });
+    req.done(function(data) {
+      $('#MyTable').html(data);
+    });
+});
+
+
+$('#add2db').on('click', function(){
+    req = $.ajax({
+        type : 'POST',
+        url : '/index',
+        data : { button : 'add2db'}, 
+        success : function(){
+        }
+    });
+    req.done(function(data) {
+      $('#MyTable').html(data);
+    });
+});
+
+$('#erasedb').on('click', function(){
+    req = $.ajax({
+        type : 'POST',
+        url : '/index',
+        data : { button : 'erasedb'}, 
+        success : function(){
+        }
+    });
+    req.done(function(data) {
+      $('#MyTable').html(data);
+    });
+});
+
+</script>
+
+{% endblock %}

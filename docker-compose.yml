@@ -1,0 +1,22 @@
+version: '3.7'
+
+services:
+  webapp:
+    image: hmullermail/working_with_docker_webapp:alpine_v1
+    build: ./webapp
+    user: root
+    environment:
+      START_FLAG: 'True'
+    volumes:
+      - /data/working_with_docker/:/data/
+    expose:
+      - "3000"
+      
+  proxy:
+    image: hmullermail/working_with_docker_proxy:alpine_v1
+    build: ./proxy
+    ports:
+      - "8080:8080"
+    depends_on:
+      - webapp
+
