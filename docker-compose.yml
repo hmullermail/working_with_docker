@@ -8,7 +8,7 @@ services:
     environment:
       START_FLAG: 'True'
     volumes:
-      - /data/working_with_docker/:/data/
+      - ./data:/data/
     expose:
       - "3000"
       

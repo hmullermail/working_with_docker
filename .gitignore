@@ -26,9 +26,9 @@ venv
 # Database
 migrations
 app.db
+data
 
 # Environment files
 #.env
 .env-mysql
 
-app.db
